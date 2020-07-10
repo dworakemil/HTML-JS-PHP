@@ -1,0 +1,305 @@
+﻿<!DOCTYPE html>
+
+<head>
+    <title>Bank bezpieczny. Zaloguj się!</title>
+	
+    <script src = 'jquery.js' ></script>
+	<script src = "taffy.js"></script>
+	<script src = "sha256.min.js"></script>
+	<script src = "smtp.js"></script> 
+	
+    <link rel = 'stylesheet' type = 'text/css' href = 'style.css'>
+	
+    <script>
+	
+		function sleep(ms) {
+			return new Promise(resolve => setTimeout(resolve, ms));
+		}
+
+        function getStylePropertyValue( element, property ){
+            return window.getComputedStyle(element, null).getPropertyValue( property );
+        }
+
+        $( 'document' ).ready( function(){
+        } );
+		
+		
+		function sendEmail( code, email ) {
+			Email.send({
+				Host: "smtp.gmail.com",
+				Username : "bank.bezpieczny@gmail.com",
+				Password : "zaq1@WSX123",
+				To : email,
+				From : "bank.bezpieczny@gmail.com",
+				Subject : "kod dostępu do banku bezpiecznego",
+				Body : code,
+			}).then(
+				message => alert( "E-mail z kodem został wysłany" )
+			);
+		}
+		
+		
+		async function showError( message ){
+			$( '#password_error' )[0].innerHTML = message;
+			$( '#password_error' )[0].style.display = 'block';
+			
+			$( '#left_column' )[0].style.display = 'none';
+			$( '#center_column' )[0].style.display = 'none';
+			$( '#right_column' )[0].style.display = 'none';
+			
+			await sleep( 3000 );
+			
+			$( '#password_error' )[0].style.display = 'none';
+			
+			$( '#left_column' )[0].style.display = 'block';
+			$( '#center_column' )[0].style.display = 'block';
+			$( '#right_column' )[0].style.display = 'block';
+			$( '#login1' )[0].style.display = 'block';
+			$( '#login2' )[0].style.display = 'none';
+			$( '#login3' )[0].style.display = 'none';
+		};
+		
+		counter = 0;
+		authorised = 0;
+		async function next(){
+		
+			console.log( counter );
+		
+			if( counter == 0 ){ //login provided
+				$( '#login1' )[0].style.display = 'none';
+				$( '#login2' )[0].style.display = 'block';
+				
+				login = $( '#login' ).val();
+				
+				//alert(database({ login: login }).first().password);
+				
+				db = database( { login: login } );
+				
+				src = db.first().safeicon ;
+				src = "icon/" + src + ".png";
+				$( '#login2 img' ).attr( "src", src );
+			}
+			else if( counter == 1 ){ // password provided
+				pwd = sha256( $( '#password' ).val() );
+				
+				if( pwd == db.first().password ){
+					// PROPER PASSWORD
+					authorised = 1;
+					$( '#login2' )[0].style.display = 'none';
+					$( '#login3' )[0].style.display = 'block';
+					
+					
+					code = Math.floor( Math.random() * 899999 + 100000 );
+					email = db.first().email;
+					
+					sendEmail( code, email );
+					
+					
+					
+				}
+				else{
+					showError( "Niepoprawny login lub hasło" );
+				
+					counter = -1;
+				}
+			}
+			
+			if( authorised == 1 ){
+				if( counter == 2 ){
+					if( $( '#code' ).val() == code ){
+						// PROPER CODE
+						
+						$( '#left_column' )[0].style.display = 'none';
+						$( '#center_column' )[0].style.display = 'none';
+						$( '#right_column' )[0].style.display = 'none';
+						
+						
+						
+						$( '#account_details' )[0].style.display = 'block';
+						$( '#balance' )[0].innerHTML = db.first().cash;
+						
+					}
+					else{
+						showError( "Niepoprawny kod" );
+					}
+				}
+			}
+			
+			
+			counter += 1;
+		}
+		
+		// BAZA DANYCH
+		var database = TAFFY([ 
+			{ login: "123456", safeicon: "ring", password: "73950d9acf672365ad26ffddb060a752ec871263400c2801d7309b204d5ff980", cash: 10, email: "przypadkowy.klient@gmail.com" }, // pwd ela
+			{ login: "654321", safeicon: "dog", password: "7dbf606842607c9e0ae317910aabf2d2fbf9e93e9ddd21b1faf6e329887112a0", cash: 98, email: "przypadkowy.klient@gmail.com" }, // pwd dobre
+			{ login: "admin", safeicon: "cat", password: "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918", cash: 10001, email: "bank.bezpieczny@gmail.com" }, // pwd admin
+			{ login: "123123", safeicon: "ring", password: "96cae35ce8a9b0244178bf28e4966c2ce1b8385723a96a6b838858cdd6ca0a1e", cash: 1020, email: "przypadkowy.klient@gmail.com" } // pwd 123123
+			
+			]);
+	
+		// END OF BAZA DANYCH
+		
+    </script>
+	
+	<style>
+		#content{
+			max-width: 80%;
+		}
+		#left_column{
+			float:left;
+			width: 20%;
+			height: 100vh;
+			padding-right: 60px;
+		}
+		#center_column{
+			float:left;
+			width: 50%;
+			height: 100vh;
+		}
+			#login_box{
+				width: 60%;
+				margin: auto;
+				transform: scale( 1.2 );
+				background-color: white;
+				border-radius: 10px;
+				border: solid #888888 1px;
+				padding-left:20px;
+				
+				/* shadow */
+				-webkit-box-shadow: 0px 5px 33px 6px rgba(0,0,0,0.75);
+				-moz-box-shadow: 0px 5px 33px 6px rgba(0,0,0,0.75);
+				box-shadow: 0px 5px 33px 6px rgba(0,0,0,0.75);
+			}
+			#login_box form{
+				padding: 50px;
+				padding-right: 0px;
+				padding-left: 20px;
+				margin-right: 30px;
+			}
+			#login, #password, #code{
+				width: 100%;
+				margin-top: 10px;
+			}
+			#login2{
+				display: none;
+			}
+			#login2 img{
+				margin-top: -64px;
+			}
+			#login3{
+				display: none;
+			}
+			#login_box form button{
+				width: 102%;
+				margin-top: 2px;
+				background-color: red;
+				color: white;
+				height: 30px;
+			}
+		#right_column{
+			float:left;
+			width: 20%;
+			height: 100vh;
+		}
+		
+		#password_error{
+			width: 100%;
+			margin: auto;
+			float: left;
+			font-size: 36px;
+			display: none;
+		}
+		
+		#account_details{
+			width: 100%;
+			margin: auto;
+			float: left;
+			font-size: 22px;
+			display: none;
+		}
+	
+	</style>
+</head>
+
+<body>
+
+    <div id = 'main'>
+        <div id = 'menu' >
+            <ul>
+                <li class = 'homepage'>
+                    <a href = "index.html">Strona główna</a>
+                </li>
+                <li class = 'login'>
+                    <a href = "login.html?#">Zaloguj się</a>
+                </li>
+
+            </ul>
+        </div>
+		
+        <div id = 'content'>
+			<div id = "left_column">
+				<img src = "img/guardian.png" style = "margin: auto auto auto 40% ; width: 20%;"/>
+				<h2 style = "text-align: center"> Bezpieczeństwo to podstawa</h2>
+				<p style = "text-align: center">
+					Pobieraj i aktualizuj stronę wyłącznie, gdy przyjdzie e-mail z adresu edworak@edu.cdv.pl</br></br>
+					Sprawdź swój obrazek bezpieczeństwa przed wpisaniem hasła.</br></br>
+					Nie otwieraj linków i załączników od nieznanych nadawców.
+				</p>
+			</div>
+			
+			<div id = "center_column">
+				<div id = "login_box">
+					<h2>
+						Logowanie krok 1
+					</h2>
+				
+					<form action = "#" >
+						<div id = "login3">
+							<label>Wpisz kod wysłany na mail</label>
+							<input type = "text" id = "code"></br>
+						</div>
+						
+						<div id = "login2">
+							<img src = "icon/ring.png"></br>
+							<label>Wpisz hasło</label>
+							<input type = "text" id = "password"></br>
+						</div>
+						
+						<div id = "login1">
+							<label>Wpisz login</label>
+							<input type = "text" id = "login"></br>
+						</div>
+						
+						<button id = "send" onclick = "next()">Dalej</button>
+					</form>
+				</div>
+				
+				<p style = "text-align: center; font-size: 1em;">
+					</br></br></br>
+					<span style = "color: red; font-weight: bold; font-size: 1.1em">Uwaga! Może zadzwonić do Ciebie przestępca</span></br>
+					Przestępcy dzwonią do naszych klientów i podszywają się pod pracowników banku. Zachowaj czujność, to próba wyłudzenia poufnych danych przez rozmowę telefoniczną. Pracownik banku nigdy nie zapyta Cię o dane logowania. Ani o stan konta. Ani o nic, bo my nie dzwonimy do klientów.</br></br>
+					<span style = "color: red;  font-size: 1.1em" >Hacker może włamać się na Twoje konto</span> jeśli nie będziesz wystarczająco ostrożny. Zachowaj czujność i zawsze sprawdzaj swój obrazek bezpieczeństwa</br></br>
+					
+				</p>
+			</div>
+				
+			<div id = "right_column">
+			</div>
+			
+			<div id = "password_error">
+				<p>BŁĘDNY LOGIN LUB HASŁO</p>
+			</div>
+			
+			
+			<div id = "account_details">
+				<p>Stan Twojego konta to: <span id = "balance"></span>PLN</p>
+			</div>
+		</div>
+
+    </div>
+
+
+</body>
+
+</html>

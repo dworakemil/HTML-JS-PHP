@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+
+
+<head>
+    <meta name = "robots" content = "index">
+    
+    <title>Bank bezpieczny. Zaufaj nam!</title>
+    <meta description = "Bank, który oferuje bezpieczeństwo. Zawsze i wszędzie. Chyba że komuś uda się włamać, no to wtedy nie.">
+
+
+    <script src = 'jquery.js' ></script>
+    <link rel = 'stylesheet' type = 'text/css' href = 'style.css'>
+	
+    <script>
+
+        function getStylePropertyValue( element, property ){
+            return window.getComputedStyle(element, null).getPropertyValue( property );
+        }
+
+        $( 'document' ).ready( function(){
+        } );
+
+    </script>
+</head>
+
+<body>
+
+    <div id = 'main'>
+        <div id = 'menu' >
+            <ul>
+                <li class = 'homepage'>
+                    <a href = "index.html">Strona główna</a>
+                </li>
+                <li class = 'login'>
+                    <a href = "login.html?#">Zaloguj się</a>
+                </li>
+
+            </ul>
+        </div>
+
+        <div id = 'content'>
+            <h1>
+                Witamy w banku bezpiecznym!
+            </h1>
+
+            <h3>
+                Nasz bank działa nieprzerwanie od kiedy tylko skończyłem zadanie zaliczeniowe. Jesteśmy godni zaufania, nigdy nikomu nie udało się włamać. Prawdopodobnie też nikt nigdy nie próbował.
+            </h3>
+			</br>
+			<h3 style = "float:right;">
+				<a href = "login.html?#">
+					Przejdź do strony logowania
+				</a>
+			</h3>
+        </div>
+
+    </div>
+
+
+</body>
+
+</html>
