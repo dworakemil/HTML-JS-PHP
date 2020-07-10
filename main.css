@@ -1,0 +1,71 @@
+body{
+	 position:relative
+}
+
+div.snake{
+	background-color:brown; 
+	width:8px; 
+	height:8px;
+	border:1px solid white;
+	position:absolute;
+}
+
+div.point{
+	background-color:yellow; 
+	width:8px; 
+	height:8px;
+	border:1px solid white;
+	position:absolute;
+}
+
+div.pointCounter{
+	right:1px;
+	top:0px;
+	width:40px;
+	height:25px;
+	border:1px solid white;
+	position:absolute;
+	font-size:20px;
+	color:red;
+	text-align:center;
+}
+
+button#restart{
+	margin:auto;
+	font-size:18px;
+}
+
+div.lose{
+	left:50%;
+	width:320px;
+	margin-left:-160px;
+	display:none;
+	position:absolute;
+	top:0px;
+	top:50%;
+	height:70px;
+	font-size:60px;
+	color:red;
+	text-align:center;
+}
+
+div.border{
+	width:800px;
+	height:500px;
+	border:5px solid red;
+	margin:auto;
+	position:relative;
+	background-color:#DDD;
+}
+
+#ranklose{
+	width:250px;
+	height:170px;
+	margin:auto;
+	position:relative;
+	background-color:#DDD;
+	text-align:center;
+	padding-top:80px;
+	font-size:20px;
+	color:red;
+}
