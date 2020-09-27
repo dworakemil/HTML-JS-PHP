@@ -1,0 +1,157 @@
+<html>
+	<head>
+		<style>
+			body{
+				background-color: 000099;
+			}
+			#all{
+				background-color: black;
+				width: 800px;
+				height: 600px;
+				margin: auto;
+				position: relative;
+			}
+			#rpad{
+				background-color: white;
+				width: 15px;
+				margin-left: 780px;
+				position: absolute;
+			}
+			#lpad{
+				background-color: white;
+				width: 15px;
+				margin-left: 5px;
+				position: absolute;
+			}
+			#ball{
+				background-color: white;
+				width: 15px;
+				height: 15px;
+				position: absolute;
+			}
+		</style>
+
+		<script>
+			var lMoveUp;
+			var lMoveDown;
+			var rMoveUp;
+			var rMoveDown;
+			var height = 120;
+			//ballMove 0=leftdown 1=leftup 2=rightup 3=rightdown
+			var ballMove = 0;
+			var ballSpeed = 1;
+			function starter(){
+				document.getElementById("rpad").style.top = 50;
+				document.getElementById("rpad").style.height = height;
+				document.getElementById("lpad").style.top = 50;
+				document.getElementById("lpad").style.height = height;
+				
+				document.getElementById("ball").style.top = 300;
+				document.getElementById("ball").style.left = 200;
+				setInterval(move,7);
+			}
+			
+			
+			
+			
+			
+			function move(){
+				
+				//document.getElementById("rpad").style.top = parseInt(document.getElementById("rpad").style.top) - 5;
+				//moving pads
+				var rPosTop = parseInt(document.getElementById("rpad").style.top);
+					if(rMoveUp == 1 && rPosTop>0) document.getElementById("rpad").style.top = rPosTop - 3;
+					if(rMoveDown == 1 && rPosTop+height<600) document.getElementById("rpad").style.top = rPosTop + 3;
+				
+				var lPosTop = parseInt(document.getElementById("lpad").style.top);
+					if(lMoveUp == 1 && lPosTop>0) document.getElementById("lpad").style.top = lPosTop - 3;
+					if(lMoveDown == 1 && lPosTop+height<600) document.getElementById("lpad").style.top = lPosTop + 3;
+				//movement pilki
+				var ballPosTop = parseInt(document.getElementById("ball").style.top);
+				var ballPosLeft = parseInt(document.getElementById("ball").style.left);
+					if(ballMove == 0){ 
+						document.getElementById("ball").style.top = ballPosTop + 1;
+						document.getElementById("ball").style.left = ballPosLeft - 1;
+					}
+					if(ballMove == 1){ 
+						document.getElementById("ball").style.top = ballPosTop - 1;
+						document.getElementById("ball").style.left = ballPosLeft - 1;
+					}
+					if(ballMove == 2){ 
+						document.getElementById("ball").style.top = ballPosTop - 1;
+						document.getElementById("ball").style.left = ballPosLeft + 1;
+					}
+					if(ballMove == 3){ 
+						document.getElementById("ball").style.top = ballPosTop + 1;
+						document.getElementById("ball").style.left = ballPosLeft + 1;
+					}
+					//odbijanie od dolnej sciany
+					if(ballMove == 0 && ballPosTop>585) ballMove = 1;
+					if(ballMove == 1 && ballPosTop<0) ballMove = 0;
+					//odbijanie od gornej sciany
+					if(ballMove == 3 && ballPosTop>585) ballMove = 2;
+					if(ballMove == 2 && ballPosTop<0) ballMove = 3;
+					
+					//odbijanie pilki od pads
+					if(ballPosTop - 7 > lPosTop && ballPosTop + 8 < lPosTop + height && ballPosLeft < 22 && ballPosLeft > 17 && ballMove == 0) ballMove = 3;
+					if(ballPosTop - 7 > lPosTop && ballPosTop + 8 < lPosTop + height && ballPosLeft < 22 && ballPosLeft > 17 && ballMove == 1) ballMove = 2;
+					
+					if(ballPosTop - 7 > rPosTop && ballPosTop + 8 < rPosTop + height && ballPosLeft > 767 && ballPosLeft < 772 && ballMove == 2) ballMove = 1;
+					if(ballPosTop - 7 > rPosTop && ballPosTop + 8 < rPosTop + height && ballPosLeft > 767 && ballPosLeft < 772 && ballMove == 3) ballMove = 0;
+					
+					
+					
+				
+				
+			}
+				
+			function keyDownCheck(){
+				//up arrow
+				if(event.keyCode == 38){
+					rMoveUp = 1;
+				}
+				//down arrow
+				if(event.keyCode == 40){
+					rMoveDown = 1;
+				}
+				//w
+				if(event.keyCode == 87){
+					lMoveUp = 1;
+				}
+				//s
+				if(event.keyCode == 83){
+					lMoveDown = 1;
+				}		
+			}
+			
+			function keyUpCheck(){
+				//up arrow
+				if(event.keyCode == 38){
+					rMoveUp = 0;
+				}
+				//down arrow
+				if(event.keyCode == 40){
+					rMoveDown = 0;
+				}
+				//w
+				if(event.keyCode == 87){
+					lMoveUp = 0;
+				}
+				//s
+				if(event.keyCode == 83){
+					lMoveDown = 0;
+				}		
+			}
+			
+		</script>
+	</head>
+
+	<body onKeyUp="keyUpCheck();" onKeyDown="keyDownCheck();" onLoad="starter();" >
+	
+		<div id="all">
+			<div id="rpad"></div>
+			<div id="lpad"></div>
+			<div id="ball"></div>
+		</div>
+	</body>
+</html>
