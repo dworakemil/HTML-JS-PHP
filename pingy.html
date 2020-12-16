@@ -56,7 +56,7 @@
 			var interval;
 			var lscore = 0;
 			var rscore = 0;
-			var game_speed = 7;
+			var game_speed = 5;
 			var height = 120;
 			var window_height = 600;
 			var window_width = 800;
@@ -125,31 +125,33 @@
 				
 				//document.getElementById("rpad").style.top = parseInt(document.getElementById("rpad").style.top) - 5;
 				//moving pads
+				var scale_pad = 3;
 				var rPosTop = parseInt(document.getElementById("rpad").style.top);
-					if(rMoveUp == 1 && rPosTop>0) document.getElementById("rpad").style.top = rPosTop - 3;
-					if(rMoveDown == 1 && rPosTop+height<600) document.getElementById("rpad").style.top = rPosTop + 3;
+					if(rMoveUp == 1 && rPosTop>0) document.getElementById("rpad").style.top = rPosTop - scale_pad;
+					if(rMoveDown == 1 && rPosTop+height<600) document.getElementById("rpad").style.top = rPosTop + scale_pad;
 				
 				var lPosTop = parseInt(document.getElementById("lpad").style.top);
-					if(lMoveUp == 1 && lPosTop>0) document.getElementById("lpad").style.top = lPosTop - 3;
-					if(lMoveDown == 1 && lPosTop+height<600) document.getElementById("lpad").style.top = lPosTop + 3;
+					if(lMoveUp == 1 && lPosTop>0) document.getElementById("lpad").style.top = lPosTop - scale_pad;
+					if(lMoveDown == 1 && lPosTop+height<600) document.getElementById("lpad").style.top = lPosTop + scale_pad;
 				//movement pilki
+				var scale_ball = 2;
 				var ballPosTop = parseInt(document.getElementById("ball").style.top);
 				var ballPosLeft = parseInt(document.getElementById("ball").style.left);
 					if(ballMove == 0){ 
-						document.getElementById("ball").style.top = ballPosTop + 1;
-						document.getElementById("ball").style.left = ballPosLeft - 1;
+						document.getElementById("ball").style.top = ballPosTop + scale_ball;
+						document.getElementById("ball").style.left = ballPosLeft - scale_ball;
 					}
 					if(ballMove == 1){ 
-						document.getElementById("ball").style.top = ballPosTop - 1;
-						document.getElementById("ball").style.left = ballPosLeft - 1;
+						document.getElementById("ball").style.top = ballPosTop - scale_ball;
+						document.getElementById("ball").style.left = ballPosLeft - scale_ball;
 					}
 					if(ballMove == 2){ 
-						document.getElementById("ball").style.top = ballPosTop - 1;
-						document.getElementById("ball").style.left = ballPosLeft + 1;
+						document.getElementById("ball").style.top = ballPosTop - scale_ball;
+						document.getElementById("ball").style.left = ballPosLeft + scale_ball;
 					}
 					if(ballMove == 3){ 
-						document.getElementById("ball").style.top = ballPosTop + 1;
-						document.getElementById("ball").style.left = ballPosLeft + 1;
+						document.getElementById("ball").style.top = ballPosTop + scale_ball;
+						document.getElementById("ball").style.left = ballPosLeft + scale_ball;
 					}
 					//odbijanie od dolnej sciany
 					if(ballMove == 0 && ballPosTop>585) ballMove = 1;
